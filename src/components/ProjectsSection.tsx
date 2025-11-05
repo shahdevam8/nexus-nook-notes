@@ -85,11 +85,22 @@ const projectCategories = [
 
 export function ProjectsSection() {
   const [activeCategory, setActiveCategory] = useState("utilities");
+  const [isAnimating, setIsAnimating] = useState(false);
   const currentCategory = projectCategories.find(cat => cat.id === activeCategory);
+
+  const handleCategoryChange = (categoryId: string) => {
+    if (categoryId === activeCategory) return;
+    
+    setIsAnimating(true);
+    setTimeout(() => {
+      setActiveCategory(categoryId);
+      setIsAnimating(false);
+    }, 150);
+  };
 
   return (
     <section id="projects" className="container mx-auto px-4 py-16">
-      <div className="text-center mb-12">
+      <div className="text-center mb-12 animate-slide-up">
         <h2 className="text-3xl md:text-4xl font-bold mb-4">
           Featured Projects
         </h2>
@@ -99,35 +110,52 @@ export function ProjectsSection() {
       </div>
 
       {/* Category Tabs */}
-      <div className="flex flex-wrap justify-center gap-2 mb-12">
-        {projectCategories.map((category) => {
+      <div className="flex flex-wrap justify-center gap-2 mb-12 animate-slide-up" style={{ animationDelay: '100ms' }}>
+        {projectCategories.map((category, idx) => {
           const Icon = category.icon;
           const isActive = activeCategory === category.id;
           return (
             <button
               key={category.id}
-              onClick={() => setActiveCategory(category.id)}
+              onClick={() => handleCategoryChange(category.id)}
               className={`
                 inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium
-                transition-all duration-300
+                transition-all duration-300 relative overflow-hidden group
                 ${isActive 
-                  ? 'bg-accent text-accent-foreground shadow-card' 
-                  : 'bg-secondary text-secondary-foreground hover:bg-accent/10 hover:text-accent'
+                  ? 'bg-accent text-accent-foreground shadow-card scale-105' 
+                  : 'bg-secondary text-secondary-foreground hover:bg-accent/10 hover:text-accent hover:scale-105'
                 }
               `}
+              style={{ animationDelay: `${idx * 50}ms` }}
             >
-              <Icon className="w-4 h-4" />
-              <span>{category.title}</span>
+              {/* Animated background on active */}
+              {isActive && (
+                <div className="absolute inset-0 bg-gradient-hero opacity-20 animate-shimmer bg-[length:200%_100%]"></div>
+              )}
+              
+              <Icon className={`w-4 h-4 relative z-10 transition-transform duration-300 ${
+                isActive ? 'rotate-0' : 'group-hover:rotate-12'
+              }`} />
+              <span className="relative z-10">{category.title}</span>
+              
+              {/* Hover effect */}
+              <div className="absolute inset-0 bg-accent/5 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
             </button>
           );
         })}
       </div>
 
       {/* Projects Grid */}
-      <div className="animate-fade-in">
+      <div className={`transition-all duration-300 ${
+        isAnimating ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+      }`}>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-6xl mx-auto">
           {currentCategory?.projects.map((project, idx) => (
-            <div key={idx} className="animate-fade-in" style={{ animationDelay: `${idx * 50}ms` }}>
+            <div 
+              key={`${activeCategory}-${idx}`} 
+              className="animate-scale-in" 
+              style={{ animationDelay: `${idx * 50}ms` }}
+            >
               <ProjectCard
                 title={project.title}
                 description={project.description}
