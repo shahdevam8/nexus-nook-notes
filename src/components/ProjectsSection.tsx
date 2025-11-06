@@ -136,7 +136,7 @@ export function ProjectsSection() {
               <Icon className={`w-4 h-4 relative z-10 transition-transform duration-300 ${
                 isActive ? 'rotate-0' : 'group-hover:rotate-12'
               }`} />
-              <span className="relative z-10">{category.title}</span>
+              <span className="relative z-10 hidden md:inline">{category.title}</span>
               
               {/* Hover effect */}
               <div className="absolute inset-0 bg-accent/5 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
