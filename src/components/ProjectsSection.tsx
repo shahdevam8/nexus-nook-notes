@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ProjectCard } from "./ProjectCard";
+import { ScrollReveal } from "./ScrollReveal";
 import { Wrench, Shield, Search, Sparkles, Brain, Gamepad2 } from "lucide-react";
 
 const projectCategories = [
@@ -100,17 +101,19 @@ export function ProjectsSection() {
 
   return (
     <section id="projects" className="container mx-auto px-4 py-12 md:py-16">
-      <div className="text-center mb-8 md:mb-12 animate-slide-up">
-        <h2 className="text-2xl md:text-4xl font-bold mb-3 md:mb-4">
-          Featured Projects
-        </h2>
-        <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto px-4">
-          Explore tools organized by purpose
-        </p>
-      </div>
+      <ScrollReveal>
+        <div className="text-center mb-8 md:mb-12">
+          <h2 className="text-2xl md:text-4xl font-bold mb-3 md:mb-4">
+            Featured Projects
+          </h2>
+          <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto px-4">
+            Explore tools organized by purpose
+          </p>
+        </div>
+      </ScrollReveal>
 
-      {/* Category Tabs */}
-      <div className="flex flex-wrap justify-center gap-2 mb-8 md:mb-12 animate-slide-up px-2" style={{ animationDelay: '100ms' }}>
+      <ScrollReveal delay={100}>
+      <div className="flex flex-wrap justify-center gap-2 mb-8 md:mb-12 px-2">
         {projectCategories.map((category, idx) => {
           const Icon = category.icon;
           const isActive = activeCategory === category.id;
@@ -145,6 +148,7 @@ export function ProjectsSection() {
           );
         })}
       </div>
+      </ScrollReveal>
 
       {/* Projects Grid */}
       <div className={`transition-all duration-300 ${
